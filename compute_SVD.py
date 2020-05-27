@@ -1,0 +1,344 @@
+import numpy as np
+import networkx as nx
+from sklearn.utils.extmath import randomized_svd
+from scipy.sparse.linalg import svds, eigsh
+from scipy import sparse
+from numpy import linalg as LA
+from datasets import UCI_loader
+from datasets import SBM_loader
+from datasets import USLegis_loader
+from datasets import canVote_loader
+from util import normal_util
+
+def random_SVD(G_times, directed=True, num_eigen=6, top=True):
+    Temporal_eigenvalues = []
+    activity_vecs = []  #eigenvector of the largest eigenvalue
+    counter = 0
+
+
+    for G in G_times:
+        if (directed):
+            A = nx.to_numpy_matrix(G)
+            # L = L.toarray()
+
+        else:
+            G2 = G.to_undirected()
+            A = nx.to_scipy_sparse_matrix(G)
+            A = A.asfptype()
+            # L = L.toarray()
+
+        if (top):
+            which="LM"
+        else:
+            which="SM"
+
+
+        #compute svd, find diagonal matrix and append the diagonal entries
+        #only consider 6 eigenvalues for now as the number of graph is small
+        #num_eigenvalues=6
+        #k=min(L.shape)-1
+        u, s, vh = randomized_svd(A, num_eigen)
+        vals = s
+        vecs = u
+        #vals, vecs= LA.eig(A)
+
+        '''
+        fix this
+        https://stackoverflow.com/questions/11953867/how-do-i-find-out-eigenvectors-corresponding-to-a-particular-eigenvalue-of-a-mat
+        '''
+        #vals, vecs = eigsh(L, k=num_eigenvalues)
+        #eigenvector of the largest eigenvalue
+        max_index = list(vals).index(max(list(vals)))
+        activity_vecs.append(np.asarray(vecs[max_index]))
+        #Temporal_eigenvalues.append(np.asarray(vals))
+        Temporal_eigenvalues.append(np.asarray(vals))
+
+        print ("processing " + str(counter), end="\r")
+        counter = counter + 1
+
+    return (Temporal_eigenvalues, activity_vecs)
+
+
+
+
+'''
+compute the eigenvalues for square laplacian matrix per time slice 
+input: list of networkx Graphs
+output: list of 1d numpy array of diagonal entries computed from SVD
+'''
+def SVD_perSlice(G_times, directed=True, num_eigen=6, top=True, max_size=500):
+    Temporal_eigenvalues = []
+    activity_vecs = []  #eigenvector of the largest eigenvalue
+    counter = 0
+
+    for G in G_times:
+        if (len(G) < max_size):
+            for i in range(len(G), max_size):
+                G.add_node(-1 * i)      #add empty node with no connectivity (zero padding)
+        if (directed):
+            L = nx.directed_laplacian_matrix(G)
+
+        else:
+            L = nx.laplacian_matrix(G)
+            L = L.asfptype()
+
+        #top = False
+        #compute svd, find diagonal matrix and append the diagonal entries
+        #only consider 6 eigenvalues for now as the number of graph is small
+        #num_eigenvalues=6
+        #k=min(L.shape)-1
+        if (top):
+            which="LM"
+        else:
+            which="SM"
+
+        u, s, vh = svds(L,k=num_eigen, which=which)
+        # u, s, vh = randomized_svd(L, num_eigen)
+        vals = s
+        vecs = u
+        #vals, vecs= LA.eig(L)
+        max_index = list(vals).index(max(list(vals)))
+        activity_vecs.append(np.asarray(vecs[max_index]))
+        Temporal_eigenvalues.append(np.asarray(vals))
+
+        print ("processing " + str(counter), end="\r")
+        counter = counter + 1
+
+    return (Temporal_eigenvalues, activity_vecs)
+
+
+'''
+compute singular value decomposition for laplacian matrix per time slice
+input: list of edgelists for each timestamp
+reconstruct a large sparse matrix
+
+limit to up to k eigenvalues
+'''
+def limited_eigenVal(G_times, directed=True, num_eigen=6, max_nodes=88282, top=True):
+    Temporal_eigenvalues = []
+    activity_vecs = []  #eigenvector of the largest eigenvalue
+    counter = 0
+
+    #D are degree for each node at diagonal entries 
+    #L = -A + D
+
+    for G in G_times:
+
+        #1. construct a 0 matrix
+        L = np.zeros((max_nodes, max_nodes), dtype=np.int8)
+
+        #2. add the adjacency edges (out edges)
+        # -A
+        for (u,v) in G:
+            L[u,v] = L[u,v]-1
+
+        #consider outdegrees
+        #3. compute the out degree for each node
+        # +D
+        for i in range(0, max_nodes):
+            L[i,i] = L[i,i] + np.sum(L[i])
+
+        L = sparse.csr_matrix(L)
+        L = L.asfptype()
+
+        if (top):
+            which="LM"
+        else:
+            which="SM"
+
+
+        #compute svd, find diagonal matrix and append the diagonal entries
+        u, s, vh = svds(L,k=num_eigen, which=which)
+        vals = s
+        vecs = u
+
+        max_index = list(vals).index(max(list(vals)))
+        activity_vecs.append(np.asarray(vecs[max_index]))
+        Temporal_eigenvalues.append(np.asarray(vals))
+
+        print ("processing " + str(counter), end="\r")
+        counter = counter + 1
+
+    return (Temporal_eigenvalues, activity_vecs)
+
+
+
+
+
+'''
+compute the SVD for adjacency matrix per time slice 
+input: list of networkx Graphs
+output: list of 1d numpy array of diagonal entries computed from SVD
+'''
+def adj_eigenvecs_perSlice(G_times, directed=True, num_eigen=6, top=True):
+    Temporal_eigenvalues = []
+    activity_vecs = []  #eigenvector of the largest eigenvalue
+    counter = 0
+
+
+    for G in G_times:
+        if (directed):
+            A = nx.to_numpy_matrix(G)
+            # L = L.toarray()
+
+        else:
+            G2 = G.to_undirected()
+            A = nx.to_scipy_sparse_matrix(G)
+            A = A.asfptype()
+            # L = L.toarray()
+
+        if (top):
+            which="LM"
+        else:
+            which="SM"
+
+
+        #compute svd, find diagonal matrix and append the diagonal entries
+        #only consider 6 eigenvalues for now as the number of graph is small
+        #num_eigenvalues=6
+        #k=min(L.shape)-1
+        u, s, vh = svds(A, k=num_eigen, which=which)
+        vals = s
+        vecs = u
+        #vals, vecs= LA.eig(A)
+
+        '''
+        fix this
+        https://stackoverflow.com/questions/11953867/how-do-i-find-out-eigenvectors-corresponding-to-a-particular-eigenvalue-of-a-mat
+        '''
+        #vals, vecs = eigsh(L, k=num_eigenvalues)
+        #eigenvector of the largest eigenvalue
+        max_index = list(vals).index(max(list(vals)))
+        activity_vecs.append(np.asarray(vecs[max_index]))
+        Temporal_eigenvalues.append(np.asarray(vals))
+
+        print ("processing " + str(counter), end="\r")
+        counter = counter + 1
+
+    return (Temporal_eigenvalues, activity_vecs)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''
+Compute the SVD diagonal vectors and save them
+'''
+def compute_diags(outEigenFile, outVecFile, fname="datasets/OCnodeslinks_chars.txt", max_nodes=1901, UCI=True):
+    if UCI:
+        G_times = UCI_loader.load_temporarl_edgelist(fname, max_nodes=max_nodes)
+    else:
+        G_times = DBLP_loader.load_dblp_temporarl_edgelist(fname, max_nodes=max_nodes)
+
+    (Temporal_eigenvalues, activity_vecs) = SVD_perSlice(G_times, directed=UCI)
+    normal_util.save_object(Temporal_eigenvalues, outEigenFile)
+    normal_util.save_object(activity_vecs, outVecFile)
+
+
+
+
+def compute_adj_SVD(outEigenFile, outVecFile, fname="datasets/OCnodeslinks_chars.txt", max_nodes=1901, UCI=True):
+    if UCI:
+        G_times = UCI_loader.load_temporarl_edgelist(fname, max_nodes=max_nodes)
+    else:
+        G_times = DBLP_loader.load_dblp_temporarl_edgelist(fname, max_nodes=max_nodes)
+    (Temporal_eigenvalues, activity_vecs) = adj_eigenvecs_perSlice(G_times, directed=UCI)
+    normal_util.save_object(Temporal_eigenvalues, outEigenFile)
+    normal_util.save_object(activity_vecs, outVecFile)
+
+
+def visiualize_vecs_UCI(eigen_file, vec_file, eigen_name, vec_name):
+    Temporal_eigenvalues = normal_util.load_object(eigen_file)
+    activity_vecs = normal_util.load_object(vec_file)
+    limit = 5
+
+    for i in range(0, len(Temporal_eigenvalues)):
+        Temporal_eigenvalues[i] = Temporal_eigenvalues[i][0:limit]
+
+    for i in range(0,len(activity_vecs)):
+        activity_vecs[i] = activity_vecs[i].flatten()[0:limit]
+
+    graph_name = "UCI"
+    # normal_util.plot_laplacian_spectrum(diag_vecs, graph_name)
+    normal_util.plot_activity_intensity(np.asarray(Temporal_eigenvalues).real, eigen_name)
+    normal_util.plot_activity_intensity(np.asarray(activity_vecs).real, vec_name)
+
+
+
+
+def compute_synthetic_SVD(fname, num_eigen=499):
+    
+    edgefile = "datasets/SBM_processed/" + fname + ".txt"
+    max_nodes = 500
+    max_time = 151
+    directed = False
+
+    G_times = SBM_loader.load_temporarl_edgelist(edgefile)
+
+    (Temporal_eigenvalues, activity_vecs) = SVD_perSlice(G_times, directed=directed, num_eigen=num_eigen, top=True, max_size=max_nodes)
+    #print (Temporal_eigenvalues)
+    normal_util.save_object(Temporal_eigenvalues, fname+ ".pkl")
+    #normal_util.save_object(activity_vecs, "synthetic_L_vecs.pkl")
+
+    # (adj_singular, adj_vecs) = random_SVD(G_times, directed=directed, num_eigen=num_eigen)
+    # normal_util.save_object(adj_singular, "synthetic_adj_singular.pkl")
+    # normal_util.save_object(adj_vecs, "synthetic_adj_vecs.pkl")
+
+
+
+def compute_legis_SVD(num_eigen=6):
+    fname = "datasets/USLegis_processed/LegisEdgelist.txt"
+    directed = False
+
+    G_times = USLegis_loader.load_legis_temporarl_edgelist(fname)
+    max_nodes = 102
+    (Temporal_eigenvalues, activity_vecs) = SVD_perSlice(G_times, directed=directed, num_eigen=num_eigen, top=True, max_size=max_nodes)
+    normal_util.save_object(Temporal_eigenvalues, "USLegis_L_singular.pkl")
+
+
+
+
+def compute_canVote_SVD(num_eigen=99):
+    fname = "datasets/canVote_processed/canVote_edgelist.txt"
+    directed = True
+    max_nodes = 100
+    G_times = canVote_loader.load_canVote_temporarl_edgelist(fname)
+    (Temporal_eigenvalues, activity_vecs) = SVD_perSlice(G_times, directed=directed, num_eigen=num_eigen, top=True, max_size=max_nodes) 
+    normal_util.save_object(Temporal_eigenvalues, "canVote_L_singular.pkl")
+    
+
+def compute_UCI_SVD(num_eigen=6):
+    fname = "datasets/UCI_processed/OCnodeslinks_chars.txt"
+    max_nodes = 1901
+    directed = True
+    G_times = UCI_loader.load_temporarl_edgelist(fname, max_nodes=max_nodes)
+    (Temporal_eigenvalues, activity_vecs) = SVD_perSlice(G_times, directed=directed, num_eigen=num_eigen, top=True, max_size=max_nodes)
+    normal_util.save_object(Temporal_eigenvalues, "UCI_L_singular.pkl")
+    
+
+
+
+
+
+def main():
+    #compute_canVote_SVD()
+    #compute_UCI_SVD()
+    compute_legis_SVD()
+    #compute_synthetic_SVD()
+
+if __name__ == "__main__":
+    main()

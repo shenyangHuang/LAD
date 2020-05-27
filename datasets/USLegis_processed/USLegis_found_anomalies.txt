@@ -1,0 +1,14 @@
+short term only
+window is 1
+initial window is 3
+(11, 6)
+found anomalous time stamps are
+[3 7]
+-------------------------------------------------------------------------
+short term and long term
+short window is 1
+long window is 2
+initial window is 3
+(11, 6)
+found anomalous time stamps are
+[ 5 10]

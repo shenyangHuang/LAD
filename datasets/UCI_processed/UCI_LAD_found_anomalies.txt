@@ -1,0 +1,181 @@
+LAD anomalies with average (normalized):
+window is 5
+initial window is 10
+found anomalous time stamps are
+[19 20 22 26 33 34 35 36 42 45]
+4/10
+
+
+LAD anomalies with average (normalized):
+window is 10
+initial window is 15
+found anomalous time stamps are
+[19 22 26 28 33 34 35 36 42 43]
+3/10
+
+
+LAD anomalies with average (normalized) with top 6 eigenvalues only:
+window is 10
+initial window is 15
+found anomalous time stamps are
+[20 28 37 41 44 45 47 50 54 57]
+1/10
+
+
+
+LAD anomalies with average (one window)
+window is 10
+initial window is 30
+(195, 6)
+found anomalous time stamps are
+[33 37 41 43 44 45 47 50 54 57]
+2/10
+
+
+LAD anomalies with average (two window)
+short window is 10
+long window is 30
+initial window is 30
+(195, 1901)
+found anomalous time stamps are
+[33 34 35 36 41 42 43 45 48 53]
+2/10
+
+---------------------------------------------------------------------
+
+LAD anomalies with svd (normalized):
+window = 5
+initial_window = 10
+found anomalous time stamps are
+[ 65  69  71  72  73 148 177 184 189 192]
+3/10
+
+
+
+LAD anomalies with svd (normalized):
+window = 10
+initial_window = 15
+found anomalous time stamps are
+[ 68  69  70 185 186 187 188 189 192 194]
+4/10
+
+
+
+LAD anomalies with svd (normalized) with top 6 eigenvalues only:
+window = 10
+initial_window = 15
+found anomalous time stamps are
+[ 62  68  69  71  73 171 178 180 181 183]
+3/10
+
+------------------------------------------------------------------------
+
+LAD anomalies with svd (normalized)  (two windows):
+short window is 5
+long window is 15
+initial window is 20
+found anomalous time stamps are
+[ 69  71  72  73 178 184 185 191 192 194]
+3/10
+
+
+
+LAD anomalies with svd (normalized)  (two windows):
+short window is 3
+long window is 9
+initial window is 15
+(195, 1901)
+found anomalous time stamps are
+[ 67  68  69  70  71  73 184 185 186 194]
+3/10
+
+
+
+LAD anomalies with svd (normalized)  (two windows):
+short window is 5
+long window is 10
+initial window is 15
+(195, 1901)
+found anomalous time stamps are
+[ 69  70  71  72  73 184 185 189 192 194]
+4/10
+
+
+LAD anomalies with svd (normalized) (one window):
+window is 10
+initial window is 30
+(195, 6)
+found anomalous time stamps are
+[ 62  68  69  71  73 171 178 180 181 183]
+3/10
+
+
+LAD anomalies with svd (normalized)  (two windows):
+short window is 10
+long window is 30
+initial window is 30
+(195, 1901)
+found anomalous time stamps are
+[ 69  70 184 185 187 188 189 191 192 194]
+5/10
+
+70: *3
+191: *3
+
+
+------------------------------------------------------------------------
+
+Laplacian activity vector (normalized)
+window is 5
+initial window is 10
+found anomalous time stamps are
+[ 53  64  78  94 137 152 154 185 188 189]
+3/10
+
+
+
+Laplacian activity vector (normalized)
+window = 10
+initial_window = 15
+found anomalous time stamps are
+[ 29  40  64  68 126 136 142 146 157 170]
+3/10
+
+
+Laplacian activity vector (normalized) top 6
+window = 10
+initial_window = 15
+[ 17  59  80  94 104 137 139 167 177 189]
+3/10
+
+------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+adjacency activity vector short term only
+window is 5
+initial window is 10
+(195, 6)
+found anomalous time stamps are
+[ 74  75  76  77  79  80  81  82  83 194]
+3/10
+
+adjacency activity vector short term only
+window is 10
+initial window is 30
+(195, 6)
+found anomalous time stamps are
+[ 57  75  78  85  89  90 104 176 188 192]
+1/10
+-------------------------------------------------------------------------
+adjacency activity vector short term and long term
+short window is 10
+long window is 30
+initial window is 30
+(195, 1901)
+found anomalous time stamps are
+[ 34  47  48  50  53  59  60  73 129 167]
+2/10
+------------------------------------------------------------------------
+
+
+
+
