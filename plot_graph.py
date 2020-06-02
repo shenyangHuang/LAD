@@ -7,8 +7,6 @@ import re
 
 
 from datasets import UCI_loader
-from datasets import DBLP_loader
-from datasets import Nature_loader
 from datasets import SBM_loader
 from datasets import USLegis_loader
 from datasets import canVote_loader
@@ -74,78 +72,6 @@ def print_labels(labels_dict):
 
 
 
-def plot_DBLP():
-    '''
-    plot statistics from DBLP dataset
-    '''
-    fname = "datasets/DBLP_processed/DBLP_1000_edgelist.txt"
-    max_nodes = 6905
-    G_times = DBLP_loader.load_dblp_temporarl_edgelist(fname, max_nodes=max_nodes)
-
-    graph_name = "DBLP"
-    '''
-    dictionary of weak labels
-    '''
-    labels_dict = {}
-    print ("edge")
-    labels_dict['edge'] = normal_util.plot_edges(G_times, graph_name)
-    print ("acc")
-    labels_dict['acc'] = normal_util.plot_avg_clustering(G_times, graph_name)
-    print ("component")
-    labels_dict['component'] = normal_util.plot_num_components_undirected(G_times, graph_name)
-    print ("weights")
-    labels_dict['weights'] = normal_util.plot_weighted_edges(G_times, graph_name)
-    print ("degree")
-    labels_dict['degree'] = normal_util.plot_degree_changes(G_times, graph_name)
-    return labels_dict
-
-
-def plot_Nature_category():
-
-    '''
-    plot statistics from Nature category dataset
-    '''
-    fname = "datasets/Nature_processed/Nature_category_edgelist.txt"
-    max_nodes = 13
-    G_times = Nature_loader.load_nature_category_edgelist(fname, max_nodes=max_nodes)
-    graph_name = "Nature interdiscipline"
-    normal_util.plot_edges(G_times, graph_name)
-    normal_util.plot_weighted_edges(G_times, graph_name)
-
-
-def plot_Nature():
-
-    '''
-    plot statistics from Nature dataset
-    '''
-    fname = "datasets/Nature_processed/Nature_edgelist.txt"
-    max_nodes = 88282
-    G_times = Nature_loader.load_nature_temporal_edgelist(fname)
-    graph_name = "Nature"
-    print ("edge")
-    outliers = normal_util.plot_edges(G_times, graph_name)
-    print (outliers)
-    print ("degree")
-    outliers = normal_util.plot_degree_changes(G_times, graph_name)
-    print (outliers)
-    
-    #normal_util.plot_weighted_edges(G_times, graph_name)
-
-
-def plot_DBLP_all_in_one():
-    fname = "datasets/DBLP_processed/DBLP_1000_edgelist.txt"
-    max_nodes = 6905
-    G_times = DBLP_loader.load_dblp_temporarl_edgelist(fname, max_nodes=max_nodes)
-    LAD = [6,12,13]
-    activity = [13, 14, 16]
-    CPD = [8, 9, 10]
-    label_sets = []
-    label_sets.append(LAD)
-    label_sets.append(activity)
-    label_sets.append(CPD)
-
-    graph_name = "DBLP"
-    normal_util.all_in_one_compare(G_times, graph_name, label_sets, False)
 
 
 def plot_synthetic():
@@ -248,18 +174,12 @@ def plot_illus():
     plt.savefig('graph_illus.pdf')
 
 
-def load_csv():
-	MP_dict = {}
-	fname = "party_politics.csv"
-	file = open(fname, "r")
-	file.readline()
-	for line in file.readlines():
-		line = line.strip("\n")
-		values = line.split(",")
-		u = values[-2]
-		party = values[-1]
-		MP_dict[u] = party
-	return MP_dict
+def load_mp():
+    fname = "datasets/canVote_processed/mp_dict.pkl"
+    MP_dict = normal_util.load_object(fname)
+
+    return MP_dict
+
 
 
 
@@ -270,16 +190,9 @@ def load_csv():
 def export_gephi():
 
     G_times = canVote_loader.load_canVote_temporarl_edgelist("datasets/canVote_processed/canVote_edgelist.txt")
-    MP_dict = load_csv()
+    MP_dict = load_mp()
     labels = list(range(2006,2020,1))
-
-    parties = []
-    for key in MP_dict.keys():
-    	if MP_dict[key] not in parties:
-    		parties.append(MP_dict[key])
-
-    print (parties)
-
+    print (len(MP_dict))
 
     for i in range(len(G_times)):
         #party for everyone!
@@ -287,35 +200,77 @@ def export_gephi():
         count = 0
         for node in G.nodes:
             if (node in MP_dict):
-            	if (MP_dict[node] == 'Conservative'):
-            		#blue
-            		G.nodes[node]['viz'] = {'color': {'r': 49, 'g': 130, 'b': 189, 'a': 0}}
-            	
-            	if (MP_dict[node] == 'Liberal'):
-            		#red
-            		G.nodes[node]['viz'] = {'color': {'r': 227, 'g': 74, 'b': 51, 'a': 0}}
+                if (len(MP_dict[node]["party"]) > 0):
+                    node_party = MP_dict[node]["party"][-1]
+                else:
+                    node_party = MP_dict[node]["party"][0]
 
-            	if (MP_dict[node] == 'Bloc'):
-            		#purple
-            		G.nodes[node]['viz'] = {'color': {'r': 136, 'g': 86, 'b': 167, 'a': 0}}
+                if (node_party == 'Conservative'):
+                    #blue
+                    G.nodes[node]['viz'] = {'color': {'r': 49, 'g': 130, 'b': 189, 'a': 0}}
 
-            	if (MP_dict[node] == 'NDP'):
-            		#green 
-            		G.nodes[node]['viz'] = {'color': {'r': 49, 'g': 163, 'b': 84, 'a': 0}}
+                # if (node_party == 'Progressive Conservative'):
+                #     #Han Purple
+                #     #http://www.flatuicolorpicker.com/blue-rgba-color-model/
+                #     G.nodes[node]['viz'] = {'color': {'r': 77, 'g': 5, 'b': 232, 'a': 1}}
+
+                # if (node_party == 'Reform'):
+                #     #light green
+                #     #http://www.flatuicolorpicker.com/green-hex-color-model/
+                #     G.nodes[node]['viz'] = {'color': {'r': 123, 'g': 239, 'b': 178, 'a': 1}}
+
+                # if (node_party == 'Canadian Alliance'):
+                #     #Mariner
+                #     #http://www.flatuicolorpicker.com/blue-rgba-color-model/
+                #     G.nodes[node]['viz'] = {'color': {'r': 44, 'g': 130, 'b': 201, 'a': 1}}
+
+                if (node_party == 'Progressive Conservative'):
+                    #blue
+                    G.nodes[node]['viz'] = {'color': {'r': 49, 'g': 130, 'b': 189, 'a': 0}}
+
+                if (node_party == 'Reform'):
+                    #blue
+                    G.nodes[node]['viz'] = {'color': {'r': 49, 'g': 130, 'b': 189, 'a': 0}}
+
+                if (node_party == 'Canadian Alliance'):
+                    #blue
+                    G.nodes[node]['viz'] = {'color': {'r': 49, 'g': 130, 'b': 189, 'a': 0}}
+
+                if (node_party == 'Liberal'):
+                    #red
+                    G.nodes[node]['viz'] = {'color': {'r': 227, 'g': 74, 'b': 51, 'a': 0}}
+
+                if (node_party == 'Bloc'):
+                    #purple
+                    G.nodes[node]['viz'] = {'color': {'r': 136, 'g': 86, 'b': 167, 'a': 0}}
+
+                if (node_party == 'NDP'):
+                    #green 
+                    G.nodes[node]['viz'] = {'color': {'r': 49, 'g': 163, 'b': 84, 'a': 0}}
+
+                if (node_party == 'Independent'):
+                    #black
+                    G.nodes[node]['viz'] = {'color': {'r': 99, 'g': 99, 'b': 99, 'a': 0}}
+
+                if (node_party == 'Green'):
+                    #green 
+                    #https://www.greenparty.ca/en/downloads
+                    #https://www.color-hex.com/color/3d9b35
+                    G.nodes[node]['viz'] = {'color': {'r': 61, 'g': 155, 'b': 53, 'a': 0}}
+
 
             else:
-            	#black is default color
-            	G.nodes[node]['viz'] = {'color': {'r': 99, 'g': 99, 'b': 99, 'a': 0}}
-
+                #black is default color
+                G.nodes[node]['viz'] = {'color': {'r': 99, 'g': 99, 'b': 99, 'a': 0}}
 
 
 
   #       graph.node['red']['viz'] = {'color': {'r': 255, 'g': 0, 'b': 0, 'a': 0}}
-		# graph.node['green']['viz'] = {'color': {'r': 0, 'g': 255, 'b': 0, 'a': 0}}
-		# graph.node['blue']['viz'] = {'color': {'r': 0, 'g': 0, 'b': 255, 'a': 0}}
+        # graph.node['green']['viz'] = {'color': {'r': 0, 'g': 255, 'b': 0, 'a': 0}}
+        # graph.node['blue']['viz'] = {'color': {'r': 0, 'g': 0, 'b': 255, 'a': 0}}
         # print (count)
 
-        nx.write_gexf(G, "gephi/" + str(labels[i]) + ".gexf")
+        nx.write_gexf(G, "gephi_new/" + str(labels[i]) + ".gexf", version="1.2draft")
 
 
 

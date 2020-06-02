@@ -280,7 +280,7 @@ def visiualize_vecs_UCI(eigen_file, vec_file, eigen_name, vec_name):
 
 
 
-def compute_synthetic_SVD(fname, num_eigen=499):
+def compute_synthetic_SVD(fname, num_eigen=499, top=True):
     
     edgefile = "datasets/SBM_processed/" + fname + ".txt"
     max_nodes = 500
@@ -289,7 +289,7 @@ def compute_synthetic_SVD(fname, num_eigen=499):
 
     G_times = SBM_loader.load_temporarl_edgelist(edgefile)
 
-    (Temporal_eigenvalues, activity_vecs) = SVD_perSlice(G_times, directed=directed, num_eigen=num_eigen, top=True, max_size=max_nodes)
+    (Temporal_eigenvalues, activity_vecs) = SVD_perSlice(G_times, directed=directed, num_eigen=num_eigen, top=top, max_size=max_nodes)
     #print (Temporal_eigenvalues)
     normal_util.save_object(Temporal_eigenvalues, fname+ ".pkl")
     #normal_util.save_object(activity_vecs, "synthetic_L_vecs.pkl")
@@ -300,33 +300,33 @@ def compute_synthetic_SVD(fname, num_eigen=499):
 
 
 
-def compute_legis_SVD(num_eigen=6):
+def compute_legis_SVD(num_eigen=6, top=True):
     fname = "datasets/USLegis_processed/LegisEdgelist.txt"
     directed = False
 
     G_times = USLegis_loader.load_legis_temporarl_edgelist(fname)
     max_nodes = 102
-    (Temporal_eigenvalues, activity_vecs) = SVD_perSlice(G_times, directed=directed, num_eigen=num_eigen, top=True, max_size=max_nodes)
+    (Temporal_eigenvalues, activity_vecs) = SVD_perSlice(G_times, directed=directed, num_eigen=num_eigen, top=top, max_size=max_nodes)
     normal_util.save_object(Temporal_eigenvalues, "USLegis_L_singular.pkl")
 
 
 
 
-def compute_canVote_SVD(num_eigen=99):
+def compute_canVote_SVD(num_eigen=99, top=True):
     fname = "datasets/canVote_processed/canVote_edgelist.txt"
     directed = True
     max_nodes = 100
     G_times = canVote_loader.load_canVote_temporarl_edgelist(fname)
-    (Temporal_eigenvalues, activity_vecs) = SVD_perSlice(G_times, directed=directed, num_eigen=num_eigen, top=True, max_size=max_nodes) 
+    (Temporal_eigenvalues, activity_vecs) = SVD_perSlice(G_times, directed=directed, num_eigen=num_eigen, top=top, max_size=max_nodes) 
     normal_util.save_object(Temporal_eigenvalues, "canVote_L_singular.pkl")
     
 
-def compute_UCI_SVD(num_eigen=6):
+def compute_UCI_SVD(num_eigen=6, top=True):
     fname = "datasets/UCI_processed/OCnodeslinks_chars.txt"
     max_nodes = 1901
     directed = True
     G_times = UCI_loader.load_temporarl_edgelist(fname, max_nodes=max_nodes)
-    (Temporal_eigenvalues, activity_vecs) = SVD_perSlice(G_times, directed=directed, num_eigen=num_eigen, top=True, max_size=max_nodes)
+    (Temporal_eigenvalues, activity_vecs) = SVD_perSlice(G_times, directed=directed, num_eigen=num_eigen, top=top, max_size=max_nodes)
     normal_util.save_object(Temporal_eigenvalues, "UCI_L_singular.pkl")
     
 

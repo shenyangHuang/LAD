@@ -466,7 +466,7 @@ def main():
     inter_prob = 0.05
     intra_prob = 0.25
     increment = 0.10
-    alpha = 0.01 
+    alpha = 0.1
     generate_pureSetting(inter_prob, intra_prob, alpha)
     generate_hybridSetting(inter_prob, intra_prob, alpha, increment)
 

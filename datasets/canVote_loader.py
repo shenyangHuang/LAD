@@ -59,6 +59,7 @@ def load_canVote_temporarl_edgelist(fname):
     #create one graph for each day
     G_times = []
     G = nx.DiGraph()
+    #idx = 0   #gephi
 
     for i in range(0, len(lines)):
         line = lines[i]
@@ -70,6 +71,8 @@ def load_canVote_temporarl_edgelist(fname):
         if current_date != '':
             if t != current_date:
                 G_times.append(G)   #append old graph
+                #nx.write_gexf(G, str(idx+2006) + ".gexf")      #gephi
+                #idx = idx + 1      #gephi
                 G = nx.DiGraph()    #create new graph
                 current_date = t
         else:
@@ -77,6 +80,7 @@ def load_canVote_temporarl_edgelist(fname):
         G.add_edge(u, v, weight=w)
     #don't forget to add last one!!!!
     G_times.append(G)
+    #nx.write_gexf(G, str(idx+2006) + ".gexf")      #gephi
 
     print ("maximum time stamp is " + str(len(G_times)))
     return G_times
