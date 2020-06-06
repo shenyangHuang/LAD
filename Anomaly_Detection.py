@@ -616,7 +616,6 @@ def detection_with_bothwindows(eigen_file = "UCI_eigs_slices.pkl", timestamps=19
 
     events = anomalies
     return (z_shorts,z_longs,z_scores, events)
-
     # plot_anomaly_score(fname, scores, score_labels, events, real_events)
     # scores = [z_scores]
     # score_labels = ["anomaly score"]
@@ -689,6 +688,7 @@ def UCI_Message():
     plot_anomaly_score("UCI", fname, scores, score_labels, events)
 
     #anomaly_ranks = [sorted(z_scores).index(x) for x in z_scores]
+    #G_times = USLegis_loader.load_legis_temporarl_edgelist(fname)
     #spearman(G_times, anomaly_ranks, True, window1, initial_window, plot=False)
 
 
@@ -705,6 +705,7 @@ def synthetic(fname):
     difference=True
     real_events = [16,31,61,76,91,106,136]
 
+
     window1 = 5
     window2 = 10
     initial_window = 10
@@ -719,8 +720,9 @@ def synthetic(fname):
 
     accu = compute_accuracy(z_scores, real_events, percent_ranked)
     print ("the hits at 7 score is " + str(accu) + " %")
-    #anomaly_ranks = [sorted(z_scores).index(x) for x in z_scores]
-    #spearman(G_times, anomaly_ranks, False, window1, initial_window)
+    # anomaly_ranks = [sorted(z_scores).index(x) for x in z_scores]
+    # G_times = SBM_loader.load_temporarl_edgelist("datasets/SBM_processed/" + fname + ".txt")
+    # spearman(G_times, anomaly_ranks, False, window1, initial_window)
 
 
 
@@ -758,8 +760,10 @@ def main():
     #canVote()
     #synthetic()
     USLegis()
+    #synthetic("pure_0.05_0.25_0.1")
     #UCI_Message()
-    
+    #pure_0.05_0.25_0.1
+
 
 
 if __name__ == "__main__":

@@ -5,7 +5,6 @@ from tensorly.decomposition import parafac
 from sklearn.neighbors import LocalOutlierFactor
 from sklearn.cluster import DBSCAN
 from datasets import UCI_loader
-from datasets import DBLP_loader
 from datasets import SBM_loader
 from datasets import USLegis_loader
 from datasets import canVote_loader
@@ -69,23 +68,6 @@ def find_factors_UCI():
     normal_util.save_object(factors,tname)
 
 
-def find_factors_DBLP():
-    fname = "datasets/DBLP_processed/DBLP_1000_edgelist.txt"
-    max_nodes = 6905
-    G_times = DBLP_loader.load_dblp_temporarl_edgelist(fname, max_nodes=max_nodes)
-    T = toTensor(G_times, max_nodes)
-    dim = 3
-    print ("CPD starts")
-    print (datetime.datetime.now())
-    factors = apply_parafac(T, dimension=dim)
-    print (datetime.datetime.now())
-    print ("CPD ends")
-    tname = "DBLP_factors.pkl"
-    normal_util.save_object(factors,tname)
-
-
-
-
 def LocalOutlierFactor_anomalies(factors, n_neighbors=20):
     anomalies = []
     Temporal_factors = factors[1][0]
@@ -109,7 +91,6 @@ def LocalOutlierFactor_anomalies(factors, n_neighbors=20):
     '''
     eps are the maximum distance between two samples to be considered as neighbors
     min_samples are the number of samples (or total weight) in a neighborhood for a point to be considered as a core point.
-    min_size is the size of a cluster that is small enough to be considered as anomalies
     '''
 def DBSCAN_anomalies(factors, eps=3, min_samples=2, min_size=10):
     anomalies = []
@@ -147,13 +128,14 @@ def DBSCAN_anomalies(factors, eps=3, min_samples=2, min_size=10):
 
 
 
-def find_synthetic_factors():
-    fname = "datasets/SBM_processed/numComAllAlpha_edgelist.txt" 
-    max_nodes = 1000
+
+def find_synthetic_factors(fname):
+    fname = "datasets/SBM_processed/" + fname + ".txt" 
+    max_nodes = 500
     num_timestamps = 151
-    G_times = SBM_loader.load_temporarl_edgelist("datasets/SBM_processed/eventChange_edgelist.txt", max_nodes=max_nodes, max_time=num_timestamps)
+    G_times = SBM_loader.load_temporarl_edgelist(fname)
     T = toTensor(G_times)
-    dim = 10
+    dim = 30
     print ("CPD starts")
     print (datetime.datetime.now())
     factors = apply_parafac(T, dimension=dim)
@@ -161,36 +143,38 @@ def find_synthetic_factors():
     print (datetime.datetime.now())
     print ("CPD ends")
 
-    # factors = normal_util.load_object("SBM_factors10.pkl")
+    #factors = normal_util.load_object("SBM_factors30.pkl")
 
     real_events = [16,31,61,76,91,106,136]
 
+    '''
+    either can be an option here
+    '''
     anomalies = LocalOutlierFactor_anomalies(factors, n_neighbors=20)
+    #anomalies = DBSCAN_anomalies(factors, eps=3, min_samples=2, min_size=10)
     accuracy = compute_accuracy(anomalies, real_events)
     print (anomalies)
     print ("prediction accuracy is " + str(accuracy))
 
 
 def find_UCI_factors():
-    # fname = "datasets/UCI_processed/OCnodeslinks_chars.txt"
-    # max_nodes = 1901
-    # num_timestamps = 196
-    # G_times = UCI_loader.load_temporarl_edgelist(fname, max_nodes=max_nodes)
-    # T = toTensor(G_times)
-    # dim = 1000
-    # print ("CPD starts")
-    # print (datetime.datetime.now())
-    # factors = apply_parafac(T, dimension=dim)
-    # normal_util.save_object(factors, "UCI_factors" + str(dim) +".pkl")
-    # print (datetime.datetime.now())
-    # print ("CPD ends")
-
-
-    factors = normal_util.load_object("UCI_factors1000.pkl")
+    fname = "datasets/UCI_processed/OCnodeslinks_chars.txt"
+    max_nodes = 1901
+    num_timestamps = 196
+    G_times = UCI_loader.load_temporarl_edgelist(fname, max_nodes=max_nodes)
+    T = toTensor(G_times)
+    dim = 30
+    print ("CPD starts")
+    print (datetime.datetime.now())
+    factors = apply_parafac(T, dimension=dim)
+    normal_util.save_object(factors, "UCI_factors" + str(dim) +".pkl")
+    print (datetime.datetime.now())
+    print ("CPD ends")
+    #factors = normal_util.load_object("UCI_factors1000.pkl")
     
     real_events = [65,158]
-
-    anomalies = LocalOutlierFactor_anomalies(factors, n_neighbors=20)
+    anomalies = DBSCAN_anomalies(factors, eps=3, min_samples=2, min_size=10)
+    #anomalies = LocalOutlierFactor_anomalies(factors, n_neighbors=20)
     accuracy = compute_accuracy(anomalies, real_events)
     print (anomalies)
     print ("prediction accuracy is " + str(accuracy))
@@ -200,10 +184,7 @@ def find_USLegis_factors():
     fname = "datasets/USLegis_processed/LegisEdgelist.txt"
     G_times = USLegis_loader.load_legis_temporarl_edgelist(fname)
     T = toTensor(G_times)
-    # print (type(T))
-    # print (type(T[0]))
-    # print (type(T[0][0]))
-    # print (type(T[0][0][0]))
+   
     dim = 10
     print ("CPD starts")
     print (datetime.datetime.now())
@@ -240,28 +221,10 @@ def find_canVote_factors():
 
 def main():
 
-    find_synthetic_factors()
+    find_synthetic_factors("eventCP_0.05_0.25_1.0")
     #find_UCI_factors()
     #find_canVote_factors()
     #find_USLegis_factors()
-    # factors = normal_util.load_object("UCI_factors6.pkl")
-    # anomalies = LocalOutlierFactor_anomalies(factors, n_neighbors=20)
-    # print (anomalies)
-    # find_UCI_factors()
-
-    #FactorFile = "UCI_factors.pkl"
-    #factors = normal_util.load_object(FactorFile)
-    #num_timestamps = 195
-    #anomalies = LocalOutlierFactor_anomalies(factors, n_neighbors=num_timestamps)
-    # find_factors_DBLP()
-    # num_timestamps = 17
-    # FactorFile = "DBLP_factors.pkl"
-    # factors = normal_util.load_object(FactorFile)
-    # anomalies = DBSCAN_anomalies(factors)
-    # print (anomalies)
-    # find_synthetic_factors()
-
-
     
 
 

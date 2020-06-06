@@ -28,6 +28,7 @@ def main():
                     help="number of eigenvalues to compute")
     parser.add_argument('--top', dest='top', action='store_true', help="To compute top eigenvalues")
     parser.add_argument('--bottom', dest='top', action='store_false', help="To compute bottom eigenvalues")
+    parser.set_defaults(top=True)
     args = vars(parser.parse_args())
     run_LAD_real(args["dataset"], args["num"], args["top"])
 

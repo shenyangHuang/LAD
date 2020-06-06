@@ -59,6 +59,29 @@ def random_SVD(G_times, directed=True, num_eigen=6, top=True):
     return (Temporal_eigenvalues, activity_vecs)
 
 
+def find_eigs(G_times, max_size, directed=True):
+    Temporal_eigenvalues = []
+    activity_vecs = []  #eigenvector of the largest eigenvalue
+    counter = 0
+
+
+    for G in G_times:
+        A = nx.to_numpy_matrix(G)
+        vals, vecs = LA.eig(A)
+        max_index = list(vals).index(max(list(vals)))
+        activity_vecs.append(np.asarray(vecs[max_index]))
+        Temporal_eigenvalues.append(np.asarray(vals))
+        print ("processing " + str(counter), end="\r")
+        counter = counter + 1
+
+    return (Temporal_eigenvalues, activity_vecs)
+
+
+
+
+
+
+
 
 
 '''
@@ -294,9 +317,10 @@ def compute_synthetic_SVD(fname, num_eigen=499, top=True):
     normal_util.save_object(Temporal_eigenvalues, fname+ ".pkl")
     #normal_util.save_object(activity_vecs, "synthetic_L_vecs.pkl")
 
-    # (adj_singular, adj_vecs) = random_SVD(G_times, directed=directed, num_eigen=num_eigen)
+    #(adj_singular, adj_vecs) = find_eigs(G_times, max_nodes, directed=directed)
+    #random_SVD(G_times, directed=True, num_eigen=6, top=True)
     # normal_util.save_object(adj_singular, "synthetic_adj_singular.pkl")
-    # normal_util.save_object(adj_vecs, "synthetic_adj_vecs.pkl")
+    #normal_util.save_object(adj_vecs, fname+ ".pkl")
 
 
 
@@ -309,14 +333,23 @@ def compute_legis_SVD(num_eigen=6, top=True):
     (Temporal_eigenvalues, activity_vecs) = SVD_perSlice(G_times, directed=directed, num_eigen=num_eigen, top=top, max_size=max_nodes)
     normal_util.save_object(Temporal_eigenvalues, "USLegis_L_singular.pkl")
 
+    # (adj_singular, adj_vecs) = random_SVD(G_times, directed=directed, num_eigen=num_eigen)
+    # normal_util.save_object(adj_vecs, "USLegis_L_singular.pkl")
 
 
 
-def compute_canVote_SVD(num_eigen=99, top=True):
+
+
+def compute_canVote_SVD(num_eigen=338, top=True):
     fname = "datasets/canVote_processed/canVote_edgelist.txt"
     directed = True
-    max_nodes = 100
     G_times = canVote_loader.load_canVote_temporarl_edgelist(fname)
+    max_len = 0
+    for G in G_times:
+        if (len(G) > max_len):
+            max_len = len(G)
+    print (max_len)
+    max_nodes = max_len
     (Temporal_eigenvalues, activity_vecs) = SVD_perSlice(G_times, directed=directed, num_eigen=num_eigen, top=top, max_size=max_nodes) 
     normal_util.save_object(Temporal_eigenvalues, "canVote_L_singular.pkl")
     
@@ -328,6 +361,9 @@ def compute_UCI_SVD(num_eigen=6, top=True):
     G_times = UCI_loader.load_temporarl_edgelist(fname, max_nodes=max_nodes)
     (Temporal_eigenvalues, activity_vecs) = SVD_perSlice(G_times, directed=directed, num_eigen=num_eigen, top=top, max_size=max_nodes)
     normal_util.save_object(Temporal_eigenvalues, "UCI_L_singular.pkl")
+
+    # (adj_singular, adj_vecs) = random_SVD(G_times, directed=directed, num_eigen=num_eigen)
+    # normal_util.save_object(adj_vecs, "UCI_L_singular.pkl")
     
 
 
