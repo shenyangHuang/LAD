@@ -8,6 +8,18 @@ Laplacian Change Point Detection for Dynamic Graphs (KDD 2020)
  
 ## Usage:
 
+1. first extract the edgelists in datasets/SBM_processed/hybrid, pure, resampled.zip
+
+2. To reproduce synthetic experiments  (-n is the number of eigenvalues used) 
+
+### python SBM_Command.py -f pure -n 499
+
+substitute pure with hybrid or resampled for the corresponding settings
+
+3. To reproduce real world experiments
+
+### python Real_Command -d USLegis -n 6
+
 
 ## Library: 
 
