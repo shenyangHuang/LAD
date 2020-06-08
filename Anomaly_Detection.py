@@ -623,6 +623,7 @@ def detection_with_bothwindows(eigen_file = "UCI_eigs_slices.pkl", timestamps=19
 
     # diffscore = difference_score(z_scores)
     # plot_diff_and_nodiff("SBM", diffscore, z_scores, percent_ranked)
+    #return (z_shorts,z_longs,z_scores, events)
 
 
 
@@ -759,8 +760,8 @@ def canVote():
 def main():
     #canVote()
     #synthetic()
-    USLegis()
-    #synthetic("pure_0.05_0.25_0.1")
+    #USLegis()
+    synthetic("pure_0.05_0.25_0")
     #UCI_Message()
     #pure_0.05_0.25_0.1
 

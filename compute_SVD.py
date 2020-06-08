@@ -306,7 +306,17 @@ def visiualize_vecs_UCI(eigen_file, vec_file, eigen_name, vec_name):
 def compute_synthetic_SVD(fname, num_eigen=499, top=True):
     
     edgefile = "datasets/SBM_processed/" + fname + ".txt"
-    max_nodes = 500
+
+    '''
+    careful
+    '''
+
+
+    max_nodes = 1000
+
+
+
+
     max_time = 151
     directed = False
 

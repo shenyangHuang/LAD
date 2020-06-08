@@ -382,7 +382,7 @@ def generate_event_change(inter_prob, intra_prob, alpha, increment):
     cps_sizes = []
     cps_probs = []
 
-    sizes_1 = [250,250] #500 nodes total at all times
+    sizes_1 = [250,250]
     probs_1 = construct_SBM_block(sizes_1, inter_prob, intra_prob)
 
     sizes_2 = [125,125,125,125]
@@ -466,17 +466,17 @@ def main():
     inter_prob = 0.05
     intra_prob = 0.25
     increment = 0.10
-    alpha = 0.1
-    #generate_pureSetting(inter_prob, intra_prob, alpha)
+    alpha = 0.0
+    generate_pureSetting(inter_prob, intra_prob, alpha)
+    #alpha = 0.1
     #generate_hybridSetting(inter_prob, intra_prob, alpha, increment)
 
-    # generate_ChangePoint(inter_prob, intra_prob, alpha)
+    # inter_prob = 0.005
+    # intra_prob = 0.03
+    # increment = 0.10
+    # alpha = 1.0
+    # #generate_ChangePoint(inter_prob, intra_prob, alpha)
     # generate_event_change(inter_prob, intra_prob, alpha, increment)
-
-    alpha = 1.0
-    generate_event_change(inter_prob, intra_prob, alpha, increment)
-
-
 
 
 
