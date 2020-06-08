@@ -5,6 +5,7 @@ Laplacian Change Point Detection for Dynamic Graphs (KDD 2020)
 
 ## Content:
 
+if you use Canadian Voting data, please cite this paper. 
  
 ## Usage:
 
