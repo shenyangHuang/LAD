@@ -36,7 +36,6 @@ substitute pure with hybrid or resampled for the corresponding settings
 
 6. matplotlib 1.3.1
 
-## Reproducing Experiments:
 
 
 ## Citation:
