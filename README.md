@@ -3,6 +3,8 @@ Official python implementation of the paper:
 
 Laplacian Change Point Detection for Dynamic Graphs (KDD 2020)
 
+arXiv link: https://arxiv.org/abs/2007.01229
+
 ## dataset:
 
 In datasets/canVote_processed, you can find our original Canadian Bill Voting network. 
