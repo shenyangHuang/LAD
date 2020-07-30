@@ -3,7 +3,15 @@ Official python implementation of the paper: Laplacian Change Point Detection fo
 
 arXiv link: https://arxiv.org/abs/2007.01229
 
-## dataset:
+![anomalous snapshots](figs/20122013.png)
+
+For more info on me and my work, please checkout my [website](https://www.cs.mcgill.ca/~shuang43/). If you have any questions, feel free to contact me at my [email](shenyang.huang@mail.mcgill.ca)
+
+## Content:
+all synthetic experiments and real world experiments from the paper can be reproduced here. 
+
+## Datasets:
+In datasets/, You can find edgeslists for both the synthetic and real world experiments we have. 
 
 In datasets/canVote_processed, you can find our original Canadian Bill Voting network. 
 if you use it, please cite this paper. 
