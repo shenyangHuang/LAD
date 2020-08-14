@@ -51,5 +51,5 @@ substitute pure with hybrid or resampled for the corresponding settings
 
 ## Citation:
 
-If use code or data from this repository, please consider this paper: 
+If code or data from this repo is useful for your project, please consider this paper: 
 
