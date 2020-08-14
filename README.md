@@ -51,4 +51,10 @@ substitute pure with hybrid or resampled for the corresponding settings
 
 ## Citation:
 
+@article{huang2020laplacian,
+  title={Laplacian Change Point Detection for Dynamic Graphs},
+  author={Huang, Shenyang and Hitti, Yasmeen and Rabusseau, Guillaume and Rabbany, Reihaneh},
+  journal={arXiv preprint arXiv:2007.01229},
+  year={2020}
+}
 
