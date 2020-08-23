@@ -1,6 +1,7 @@
 ## LAD
 Official python implementation of the paper: Laplacian Change Point Detection for Dynamic Graphs (KDD 2020)
 
+KDD proceeding: https://dl.acm.org/doi/10.1145/3394486.3403077
 arXiv link: https://arxiv.org/abs/2007.01229
 
 ![anomalous snapshots](figs/20122013.png)
