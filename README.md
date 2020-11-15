@@ -55,5 +55,13 @@ substitute pure with hybrid or resampled for the corresponding settings
 
 ## Citation:
 
-If code or data from this repo is useful for your project, please consider this paper: 
-
+If code or data from this repo is useful for your project, please consider citing our paper:
+```
+@inproceedings{huang2020laplacian,
+  title={Laplacian Change Point Detection for Dynamic Graphs},
+  author={Huang, Shenyang and Hitti, Yasmeen and Rabusseau, Guillaume and Rabbany, Reihaneh},
+  booktitle={Proceedings of the 26th ACM SIGKDD International Conference on Knowledge Discovery \& Data Mining},
+  pages={349--358},
+  year={2020}
+}
+```
