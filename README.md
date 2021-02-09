@@ -36,6 +36,11 @@ substitute pure with hybrid or resampled for the corresponding settings
 
 * python Real_Command -d USLegis -n 6
 
+* python Real_Command -d UCI -n 6
+
+* python Real_Command -d canVote -n 338
+
+
 
 ## Library: 
 

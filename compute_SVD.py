@@ -19,13 +19,11 @@ def random_SVD(G_times, directed=True, num_eigen=6, top=True):
     for G in G_times:
         if (directed):
             A = nx.to_numpy_matrix(G)
-            # L = L.toarray()
 
         else:
             G2 = G.to_undirected()
             A = nx.to_scipy_sparse_matrix(G)
             A = A.asfptype()
-            # L = L.toarray()
 
         if (top):
             which="LM"
@@ -40,14 +38,6 @@ def random_SVD(G_times, directed=True, num_eigen=6, top=True):
         u, s, vh = randomized_svd(A, num_eigen)
         vals = s
         vecs = u
-        #vals, vecs= LA.eig(A)
-
-        '''
-        fix this
-        https://stackoverflow.com/questions/11953867/how-do-i-find-out-eigenvectors-corresponding-to-a-particular-eigenvalue-of-a-mat
-        '''
-        #vals, vecs = eigsh(L, k=num_eigenvalues)
-        #eigenvector of the largest eigenvalue
         max_index = list(vals).index(max(list(vals)))
         activity_vecs.append(np.asarray(vecs[max_index]))
         #Temporal_eigenvalues.append(np.asarray(vals))
@@ -105,11 +95,6 @@ def SVD_perSlice(G_times, directed=True, num_eigen=6, top=True, max_size=500):
             L = nx.laplacian_matrix(G)
             L = L.asfptype()
 
-        #top = False
-        #compute svd, find diagonal matrix and append the diagonal entries
-        #only consider 6 eigenvalues for now as the number of graph is small
-        #num_eigenvalues=6
-        #k=min(L.shape)-1
         if (top):
             which="LM"
         else:
@@ -202,35 +187,20 @@ def adj_eigenvecs_perSlice(G_times, directed=True, num_eigen=6, top=True):
     for G in G_times:
         if (directed):
             A = nx.to_numpy_matrix(G)
-            # L = L.toarray()
 
         else:
             G2 = G.to_undirected()
             A = nx.to_scipy_sparse_matrix(G)
             A = A.asfptype()
-            # L = L.toarray()
 
         if (top):
             which="LM"
         else:
             which="SM"
-
-
-        #compute svd, find diagonal matrix and append the diagonal entries
-        #only consider 6 eigenvalues for now as the number of graph is small
-        #num_eigenvalues=6
-        #k=min(L.shape)-1
         u, s, vh = svds(A, k=num_eigen, which=which)
         vals = s
         vecs = u
-        #vals, vecs= LA.eig(A)
-
-        '''
-        fix this
-        https://stackoverflow.com/questions/11953867/how-do-i-find-out-eigenvectors-corresponding-to-a-particular-eigenvalue-of-a-mat
-        '''
-        #vals, vecs = eigsh(L, k=num_eigenvalues)
-        #eigenvector of the largest eigenvalue
+        
         max_index = list(vals).index(max(list(vals)))
         activity_vecs.append(np.asarray(vecs[max_index]))
         Temporal_eigenvalues.append(np.asarray(vals))
@@ -239,22 +209,6 @@ def adj_eigenvecs_perSlice(G_times, directed=True, num_eigen=6, top=True):
         counter = counter + 1
 
     return (Temporal_eigenvalues, activity_vecs)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -296,7 +250,6 @@ def visiualize_vecs_UCI(eigen_file, vec_file, eigen_name, vec_name):
         activity_vecs[i] = activity_vecs[i].flatten()[0:limit]
 
     graph_name = "UCI"
-    # normal_util.plot_laplacian_spectrum(diag_vecs, graph_name)
     normal_util.plot_activity_intensity(np.asarray(Temporal_eigenvalues).real, eigen_name)
     normal_util.plot_activity_intensity(np.asarray(activity_vecs).real, vec_name)
 
@@ -323,14 +276,7 @@ def compute_synthetic_SVD(fname, num_eigen=499, top=True):
     G_times = SBM_loader.load_temporarl_edgelist(edgefile)
 
     (Temporal_eigenvalues, activity_vecs) = SVD_perSlice(G_times, directed=directed, num_eigen=num_eigen, top=top, max_size=max_nodes)
-    #print (Temporal_eigenvalues)
     normal_util.save_object(Temporal_eigenvalues, fname+ ".pkl")
-    #normal_util.save_object(activity_vecs, "synthetic_L_vecs.pkl")
-
-    #(adj_singular, adj_vecs) = find_eigs(G_times, max_nodes, directed=directed)
-    #random_SVD(G_times, directed=True, num_eigen=6, top=True)
-    # normal_util.save_object(adj_singular, "synthetic_adj_singular.pkl")
-    #normal_util.save_object(adj_vecs, fname+ ".pkl")
 
 
 
@@ -342,10 +288,6 @@ def compute_legis_SVD(num_eigen=6, top=True):
     max_nodes = 102
     (Temporal_eigenvalues, activity_vecs) = SVD_perSlice(G_times, directed=directed, num_eigen=num_eigen, top=top, max_size=max_nodes)
     normal_util.save_object(Temporal_eigenvalues, "USLegis_L_singular.pkl")
-
-    # (adj_singular, adj_vecs) = random_SVD(G_times, directed=directed, num_eigen=num_eigen)
-    # normal_util.save_object(adj_vecs, "USLegis_L_singular.pkl")
-
 
 
 
@@ -372,8 +314,6 @@ def compute_UCI_SVD(num_eigen=6, top=True):
     (Temporal_eigenvalues, activity_vecs) = SVD_perSlice(G_times, directed=directed, num_eigen=num_eigen, top=top, max_size=max_nodes)
     normal_util.save_object(Temporal_eigenvalues, "UCI_L_singular.pkl")
 
-    # (adj_singular, adj_vecs) = random_SVD(G_times, directed=directed, num_eigen=num_eigen)
-    # normal_util.save_object(adj_vecs, "UCI_L_singular.pkl")
     
 
 
@@ -381,10 +321,7 @@ def compute_UCI_SVD(num_eigen=6, top=True):
 
 
 def main():
-    #compute_canVote_SVD()
-    #compute_UCI_SVD()
     compute_legis_SVD()
-    #compute_synthetic_SVD()
 
 if __name__ == "__main__":
     main()

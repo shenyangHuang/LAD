@@ -284,36 +284,7 @@ def export_gephi():
 
 def main():
     export_gephi()
-    #plot_illus()
-
-    # fname = "datasets/canVote_processed/canVote_edgelist.txt"
-    # G_times = canVote_loader.load_canVote_temporarl_edgelist(fname)
-    # G_0 = G_times[0]
-    # plot_vis(G_0)
-
-    #plot_spectrum("USLegis_L_singular6.pkl", "USLegis")
-    # plot_canVote_allinOne()
-
-
-    #plot_DBLP_all_in_one()
-    # fname = "datasets/UCI_processed/OCnodeslinks_chars.txt"
-    # max_nodes = 1901
-    # G_times = UCI_loader.load_temporarl_edgelist(fname, max_nodes=max_nodes)
-    # normal_util.plot_compare_weak_labels_edge(G_times, "UCI message")
-
-
-
-    # plot_Nature()
-    # fname = "datasets/DBLP_processed/DBLP_1000_edgelist.txt"
-    # max_nodes = 6905
-    # G_times = DBLP_loader.load_dblp_temporarl_edgelist(fname, max_nodes=max_nodes)
-
-    # graph_name = "DBLP"
-    # normal_util.all_plots_in_one(G_times, graph_name)
-    # labels_dict = plot_DBLP()
-    # print_labels(labels_dict)
-
-
+    
 
 if __name__ == "__main__":
     main()

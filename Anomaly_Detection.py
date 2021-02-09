@@ -738,9 +738,9 @@ def canVote():
     difference=True
     #real_events = [5,9]
     
-    window1 = 1
-    window2 = 2
-    initial_window = 2
+    window1 = 2
+    window2 = 4
+    initial_window = 4
     (z_shorts,z_longs,z_scores, events) = detection_with_bothwindows(eigen_file=eigen_file, timestamps=timestamps, 
             percent_ranked=percent_ranked, window1=window1, window2=window2, initial_window=initial_window, difference=difference)
     scores = []
