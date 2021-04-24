@@ -22,7 +22,9 @@ Official python implementation of the paper: Laplacian Change Point Detection fo
 
 ![anomalous snapshots](figs/20122013.png)
 
-For more info on me and my work, please checkout my [website](https://www.cs.mcgill.ca/~shuang43/). If you have any questions, feel free to contact me at my email: shenyang.huang@mail.mcgill.ca
+For more info on me and my work, please checkout my [website](https://www.cs.mcgill.ca/~shuang43/). 
+
+If you have any questions, feel free to contact me at my email: shenyang.huang@mail.mcgill.ca
 
 Many thanks to my amazing co-authors: Yasmeen Hitti, [Guillaume Rabusseau](https://www-labs.iro.umontreal.ca/~grabus/), [Reihaneh Rabbany](http://www.reirab.com/) 
 
