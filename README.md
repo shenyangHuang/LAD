@@ -11,7 +11,7 @@ Official python implementation of the paper: Laplacian Change Point Detection fo
   </a>
 
    <a href="https://drive.google.com/file/d/1jBgNwCrKdOiuAwH28qlH6amtpYXzog9F/view?usp=sharing">
-      <img src="http://img.shields.io/badge/Slides-PDF-ff9e18.svg">
+      <img src="https://img.shields.io/badge/slides-pdf-blue">
   </a>
   
   <a href="https://www.kdd.org/kdd2020/accepted-papers/view/laplacian-change-point-detection-for-dynamic-graphs">
