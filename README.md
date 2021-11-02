@@ -49,11 +49,11 @@ substitute pure with hybrid or resampled for the corresponding settings
 
 3. To reproduce real world experiments
 
-* python Real_Command -d USLegis -n 6
+* python Real_Command.py -d USLegis -n 6
 
-* python Real_Command -d UCI -n 6
+* python Real_Command.py -d UCI -n 6
 
-* python Real_Command -d canVote -n 338
+* python Real_Command.py -d canVote -n 338
 
 
 
