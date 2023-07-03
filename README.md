@@ -28,6 +28,14 @@ If you have any questions, feel free to contact me at my email: shenyang.huang@m
 
 Many thanks to my amazing co-authors: Yasmeen Hitti, [Guillaume Rabusseau](https://www-labs.iro.umontreal.ca/~grabus/), [Reihaneh Rabbany](http://www.reirab.com/) 
 
+## Follow-up Works
+
+- Scale to Large Dynamic Graphs: [Fast and Attributed Change Detection on Dynamic Graphs](https://arxiv.org/abs/2305.08750) (PAKDD 2023), [github](https://github.com/shenyangHuang/SCPD)
+
+- Extending to Multi-view Dynamic Graphs: [Laplacian Change Point Detection for Single and Multi-view Dynamic Graphs](https://arxiv.org/abs/2302.01204) (preprint), [github](https://github.com/shenyangHuang/multiLAD)
+
+
+
 ## Content:
 all synthetic experiments and real world experiments from the paper can be reproduced here. 
 
