@@ -21,8 +21,6 @@ def main():
     parser.add_argument('--bottom', dest='top', action='store_false', help="To compute bottom eigenvalues")
     parser.set_defaults(top=True)
 
-
-
     args = vars(parser.parse_args())
     run_LAD_SBM(args["file"], args["num"], args["top"])
 
